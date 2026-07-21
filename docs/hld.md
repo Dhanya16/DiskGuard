@@ -1,7 +1,7 @@
 # HLD: DiskGuard — Host Capacity & Disk Reliability
 
 **Version:** 1.0  
-**Status:** Reviewed 
+**Status:** Reviewed  
 **Owner:** Dhanya  
 **Last updated:** July 2026  
 
@@ -193,9 +193,9 @@ Remediation Engine -> Policy Validator ---> Allow listed cleanup / Reject
 
 ## 13. Design Decisions
 
--- DD-01: Severity determined by worst signal
--- DD-02: Overlapping runs prevented using lock file
--- DD-03: Dry run default, apply explicit
+- DD-01: Severity determined by worst signal
+- DD-02: Overlapping runs prevented using lock file
+- DD-03: Dry run default, apply explicit
 
 ## 14. Open Questions
 
@@ -211,6 +211,6 @@ Remediation Engine -> Policy Validator ---> Allow listed cleanup / Reject
 10. What minimum history is needed to show growth over seven days?
 
 ## 15. Future Enhancements
--- FE-01: Historical trend graphs
--- FE-02: Growth rate forecasting
--- FE-03: Filesystem growth anomaly detection
+- FE-01: Historical trend graphs
+- FE-02: Growth rate forecasting
+- FE-03: Filesystem growth anomaly detection
