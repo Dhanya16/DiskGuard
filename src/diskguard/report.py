@@ -1,0 +1,9 @@
+def print_report(inventory,severity):
+    print(f"Hostname: {inventory['hostname']}")
+    print(f"Timestamp: {inventory['timestamp']}\n")
+    print(f"Filesystem: {inventory['filesystem']['path']}")
+    print(f"Total: {inventory['filesystem']['total']}")
+    print(f"Used: {inventory['filesystem']['used']}")
+    print(f"Free: {inventory['filesystem']['free']}")
+    print(f"Percent: {inventory['filesystem']['percent']}\n")
+    print(f"Severity: {severity}")
