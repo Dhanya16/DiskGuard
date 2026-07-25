@@ -29,7 +29,8 @@ def main():
             inode_usage = collect_inode_usage()
             print_inode_usage(inode_usage)
         case "top-consumers":
-            top_consumers = collect_top_n_consumers()
+            n = int(sys.argv[2]) if len(sys.argv) > 2 else TOP_N_CONSUMERS
+            top_consumers = collect_top_n_consumers(n)
             print_top_consumers(top_consumers)
         case "severity":
             inventory = collect_inventory()

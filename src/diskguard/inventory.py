@@ -62,7 +62,7 @@ def get_directory_size(directory):
         walker = os.walk(directory)
     except OSError:
         return total_size
-        
+
     for root, dirs, files in walker:
         for file in files:
             try:
@@ -73,7 +73,7 @@ def get_directory_size(directory):
     return total_size
 
 
-def collect_top_n_consumers():
+def collect_top_n_consumers(top_n=TOP_N_CONSUMERS):
     try:
         directories = os.scandir("/")
     except OSError:
@@ -89,7 +89,7 @@ def collect_top_n_consumers():
             continue
         if directory.path not in EXCLUDED_DIRECTORIES:
             consumers[directory.path] = get_directory_size(directory.path)
-    consumers = sorted(consumers.items(),reverse=True,key=lambda x: x[1])[:TOP_N_CONSUMERS]
+    consumers = sorted(consumers.items(),reverse=True,key=lambda x: x[1])[:top_n]
 
     return {
         "available": True,
