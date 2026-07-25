@@ -1,3 +1,6 @@
+from diskguard.inventory import TOP_N_CONSUMERS
+from diskguard.inventory import GB_TO_BYTES
+
 def print_report(inventory,severity):
     print(f"Hostname: {inventory['hostname']}")
     print(f"Timestamp: {inventory['timestamp']}")
@@ -19,7 +22,13 @@ def print_report(inventory,severity):
     print("--------------------------------")
     print(f"Severity : {severity}\n") 
     print("--------------------------------")
+    print("Top N Consumers:\n")
     if inventory['top_n_consumers']['available']:
-        print(f"Top N Consumers: {inventory['top_n_consumers']['consumers']}\n")
+        i=1
+        for key, value in inventory['top_n_consumers']['consumers']:
+            print(f" {i}. {key}: {round(value/GB_TO_BYTES,2)} GB")
+            i += 1
+        print()
     else:
         print("Top N Consumers unavailable\n")
+    print("--------------------------------")
