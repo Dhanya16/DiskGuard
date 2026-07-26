@@ -3,7 +3,8 @@ from diskguard.inventory import (
     collect_inventory,
     collect_filesystem_usage,
     collect_inode_usage,
-    collect_top_n_consumers
+    collect_top_n_consumers,
+    collect_containers_usage
 )
 from diskguard.thresholds import evaluate_severity
 from diskguard.report import (
@@ -11,7 +12,8 @@ from diskguard.report import (
     print_inode_usage,
     print_report,
     print_severity,
-    print_top_consumers
+    print_top_consumers,
+    print_containers_usage
 )
 from diskguard.constants import TOP_N_CONSUMERS
 
@@ -60,6 +62,9 @@ def main():
             inode_usage = collect_inode_usage()
             severity = evaluate_severity(filesystem_usage, inode_usage)
             print_severity(severity)
+        case "containers-usage":
+            containers_usage = collect_containers_usage()
+            print_containers_usage(containers_usage)
         case _:
             print(f"Unknown command:{command}")
             print_usage()

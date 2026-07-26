@@ -10,5 +10,6 @@ reports/
 .idea/
 
 # Virtual env
+.venv/
 venv/
 .env/

@@ -1,0 +1,11 @@
+containers:
+  - name: docker
+    usage_cmd: docker system df
+  - name: containerd 
+    usage_cmd: ctr images ls
+  - name: podman
+    usage_cmd: podman system df
+  - name: crio
+    usage_cmd: crictl images
+  - name: lxc
+    usage_cmd: lxc storage list
