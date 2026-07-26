@@ -16,16 +16,16 @@ def collect_filesystem_usage():
     except ZeroDivisionError:
         percent_used = 0
 
-    total = round(usage.total / GB_TO_BYTES,2)
-    used = round(usage.used / GB_TO_BYTES,2)
-    free = round(usage.free / GB_TO_BYTES,2)
+    total = usage.total
+    used = usage.used
+    free = usage.free
     return {
         "available": True,
         "path": "/",
         "total": total,
         "used": used,
         "free": free,
-        "percent": round(percent_used,2)
+        "percent": percent_used
     }
 
 def collect_inode_usage():
@@ -52,18 +52,17 @@ def collect_inode_usage():
         "total": total_inodes,
         "used": used_inodes,
         "free": free_inodes,
-        "percent": round(percent_inodes_used,2)
+        "percent": percent_inodes_used
     }
 
 def get_directory_size(directory):
     total_size = 0
 
-    try:
-        walker = os.walk(directory)
-    except OSError:
-        return total_size
-
-    for root, dirs, files in walker:
+    for root, dirs, files in os.walk(directory, onerror = lambda e: None):
+        dirs[:] = [ 
+                    d for d in dirs
+                    if not os.path.ismount(os.path.join(root, d))
+                ]
         for file in files:
             try:
                 file_path = os.path.join(root,file)

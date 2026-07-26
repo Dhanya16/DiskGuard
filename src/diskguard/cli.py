@@ -13,6 +13,7 @@ from diskguard.report import (
     print_severity,
     print_top_consumers
 )
+from diskguard.constants import TOP_N_CONSUMERS
 
 def main():
     command = sys.argv[1] if len(sys.argv) > 1 else "all"

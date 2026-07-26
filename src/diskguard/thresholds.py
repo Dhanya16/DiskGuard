@@ -1,18 +1,31 @@
+from diskguard.config.threshold import threshold
+
+def get_severity(percent, warn, crit):
+    if percent >= crit:
+        return "CRIT"
+    elif percent >= warn:
+        return "WARN"
+    return "OK"
+
 def evaluate_severity(inventory):
+    filesystem_warn = threshold['filesystem']['warn_percent']
+    filesystem_crit = threshold['filesystem']['crit_percent']
+    inode_warn = threshold['inode']['warn_percent']
+    inode_crit = threshold['inode']['crit_percent']
+
     if inventory["filesystem"]["available"]:
         percent_filesystem = inventory["filesystem"]["percent"]
+        filesystem_severity = get_severity(percent_filesystem, filesystem_warn, filesystem_crit)
     else:
-        return "UNKNOWN"
+        filesystem_severity = "UNKNOWN"
+    
     if inventory["inode"]["available"]:
         percent_inode = inventory["inode"]["percent"]
+        inode_severity = get_severity(percent_inode, inode_warn, inode_crit)
     else:
-        return "UNKNOWN"
+        inode_severity = "UNKNOWN"
 
-    percent = max(percent_filesystem, percent_inode)
-
-    if percent >= 90:
-        return "CRIT"
-    elif percent >= 80:
-        return "WARN"
-    else:
-        return "OK"
+    return {
+        "filesystem": filesystem_severity,
+        "inode": inode_severity
+    }
