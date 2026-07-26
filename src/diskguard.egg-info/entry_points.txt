@@ -1,2 +1,0 @@
-[console_scripts]
-diskguard = diskguard.cli:main
