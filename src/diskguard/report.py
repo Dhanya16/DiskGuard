@@ -23,9 +23,9 @@ def print_inode_usage(inode):
     print("--------------------------------")
 
 def print_severity(severity):
-    print(f"Severity :\n") 
+    print(f"Severity :{severity['overall']}") 
     print(f"Filesystem usage: {severity['filesystem']}")
-    print(f"Inode usage: {severity['inode']}")
+    print(f"Inode usage: {severity['inode']}\n")
     print("--------------------------------")
 
 def print_top_consumers(top_n_consumers):

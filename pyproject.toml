@@ -4,7 +4,21 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "diskguard"
-version = "0.1.0"
+version = "1.0.0"
+description = "Linux host capacity and disk reliability checker"
+requires-python = ">=3.10"
+dependencies = [
+    "PyYAML>=6.0"
+]
 
 [project.scripts]
 diskguard = "diskguard.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.package-data]
+diskguard = ["config/*.yaml"]   

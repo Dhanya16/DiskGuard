@@ -1,6 +1,6 @@
 import os, shutil, socket
 from datetime import datetime
-from diskguard.constants import GB_TO_BYTES, TOP_N_CONSUMERS, EXCLUDED_DIRECTORIES
+from diskguard.constants import TOP_N_CONSUMERS, EXCLUDED_DIRECTORIES
 
 def collect_filesystem_usage():
     try:

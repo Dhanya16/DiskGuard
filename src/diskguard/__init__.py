@@ -1,3 +1,3 @@
 # src/diskguard/__init__.py
 
-__version__ = "1.0"
+__version__ = "1.0.0"
