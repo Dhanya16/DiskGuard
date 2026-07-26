@@ -1,34 +1,50 @@
-from diskguard.inventory import TOP_N_CONSUMERS
-from diskguard.inventory import GB_TO_BYTES
+from diskguard.constants import GB_TO_BYTES
 
-def print_report(inventory,severity):
-    print(f"Hostname: {inventory['hostname']}")
-    print(f"Timestamp: {inventory['timestamp']}")
+def print_filesystem_usage(filesystem):
+    print(f"Filesystem Usage, path: {filesystem['path']}\n")
+    if filesystem['available']:
+        print(f"Total    : {round(filesystem['total'] / GB_TO_BYTES,2)} GB")
+        print(f"Used     : {round(filesystem['used'] / GB_TO_BYTES,2)} GB")
+        print(f"Free     : {round(filesystem['free'] / GB_TO_BYTES,2)} GB")
+        print(f"Percent  : {round(filesystem['percent'],2)} %\n")
+    else:
+        print("Filesystem usage unavailable")
     print("--------------------------------")
-    print(f"Filesystem Usage, path: {inventory['filesystem']['path']}\n")
-    print(f"Total    : {inventory['filesystem']['total']} GB")
-    print(f"Used     : {inventory['filesystem']['used']} GB")
-    print(f"Free     : {inventory['filesystem']['free']} GB")
-    print(f"Percent  : {inventory['filesystem']['percent']} %\n")
-    print("--------------------------------")
-    print(f"Inode Usage, path: {inventory['inode']['path']}\n")
-    if inventory['inode']['inode_usage']['available']:
-        print(f"Total    : {inventory['inode']['inode_usage']['total']} inodes")
-        print(f"Used     : {inventory['inode']['inode_usage']['used']} inodes")
-        print(f"Free     : {inventory['inode']['inode_usage']['free']} inodes")
-        print(f"Percent  : {inventory['inode']['inode_usage']['percent']} %\n")
+
+def print_inode_usage(inode):
+    print(f"Inode Usage, path: {inode['path']}\n")
+    if inode['available']:
+        print(f"Total    : {inode['total']} inodes")
+        print(f"Used     : {inode['used']} inodes")
+        print(f"Free     : {inode['free']} inodes")
+        print(f"Percent  : {round(inode['percent'],2)} %\n")
     else:
         print("Inode usage unavailable\n")
     print("--------------------------------")
-    print(f"Severity : {severity}\n") 
+
+def print_severity(severity):
+    print(f"Severity :{severity['overall']}") 
+    print(f"Filesystem usage: {severity['filesystem']}")
+    print(f"Inode usage: {severity['inode']}\n")
     print("--------------------------------")
+
+def print_top_consumers(top_n_consumers):
     print("Top N Consumers:\n")
-    if inventory['top_n_consumers']['available']:
+    if top_n_consumers['available']:
         i=1
-        for key, value in inventory['top_n_consumers']['consumers']:
+        for key, value in top_n_consumers['consumers']:
             print(f" {i}. {key}: {round(value/GB_TO_BYTES,2)} GB")
             i += 1
         print()
     else:
         print("Top N Consumers unavailable\n")
     print("--------------------------------")
+
+def print_report(inventory,severity):
+    print(f"Hostname: {inventory['hostname']}")
+    print(f"Timestamp: {inventory['timestamp']}")
+    print("--------------------------------")
+    print_filesystem_usage(inventory['filesystem'])
+    print_inode_usage(inventory['inode'])
+    print_top_consumers(inventory['top_n_consumers'])
+    print_severity(severity)

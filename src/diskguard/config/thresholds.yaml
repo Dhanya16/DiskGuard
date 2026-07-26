@@ -1,0 +1,7 @@
+filesystem:
+  warn_percent: 80
+  crit_percent: 90
+
+inode:
+  warn_percent: 80
+  crit_percent: 90
