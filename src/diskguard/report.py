@@ -8,7 +8,7 @@ def print_filesystem_usage(filesystem):
         print(f"Free     : {round(filesystem['free'] / GB_TO_BYTES,2)} GB")
         print(f"Percent  : {round(filesystem['percent'],2)} %\n")
     else:
-        print("Filesystem usage unavailable")
+        print("Unavailable")
     print("--------------------------------")
 
 def print_inode_usage(inode):
@@ -19,11 +19,11 @@ def print_inode_usage(inode):
         print(f"Free     : {inode['free']} inodes")
         print(f"Percent  : {round(inode['percent'],2)} %\n")
     else:
-        print("Inode usage unavailable\n")
+        print("Unavailable\n")
     print("--------------------------------")
 
 def print_severity(severity):
-    print(f"Severity :{severity['overall']}") 
+    print(f"Severity: {severity['overall']}") 
     print(f"Filesystem usage: {severity['filesystem']}")
     print(f"Inode usage: {severity['inode']}\n")
     print("--------------------------------")
@@ -37,7 +37,18 @@ def print_top_consumers(top_n_consumers):
             i += 1
         print()
     else:
-        print("Top N Consumers unavailable\n")
+        print("Unavailable\n")
+    print("--------------------------------")
+
+def print_containers_usage(containers_usage):
+    print("Containers Usage\n")
+    i = 1
+    if containers_usage['available']:
+        for container, usage in containers_usage['usage'].items():
+            print(f"{i}. {container.capitalize()}:\n\n {usage}")
+            i += 1
+    else:
+        print("Unavailable\n")
     print("--------------------------------")
 
 def print_report(inventory,severity):
@@ -47,4 +58,5 @@ def print_report(inventory,severity):
     print_filesystem_usage(inventory['filesystem'])
     print_inode_usage(inventory['inode'])
     print_top_consumers(inventory['top_n_consumers'])
+    print_containers_usage(inventory['containers'])
     print_severity(severity)

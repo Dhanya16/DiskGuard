@@ -1,6 +1,7 @@
 # Python
 __pycache__/
 *.pyc
+*.egg-info/
 
 # Reports
 reports/
@@ -10,5 +11,6 @@ reports/
 .idea/
 
 # Virtual env
+.venv/
 venv/
 .env/

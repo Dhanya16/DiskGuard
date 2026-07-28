@@ -1,0 +1,16 @@
+containers:
+  - name: docker
+    usage_cmd: docker system df
+    binary: docker
+  - name: containerd
+    usage_cmd: du -sh /var/lib/containerd
+    binary: du
+  - name: podman
+    usage_cmd: podman system df
+    binary: podman
+  - name: crio
+    usage_cmd: du -sh /var/lib/containers
+    binary: du
+  - name: lxc
+    usage_cmd: du -sh /var/lib/lxd
+    binary: du

@@ -1,6 +1,10 @@
-import os, shutil, socket
+import os
+import shutil
+import socket
+import subprocess
 from datetime import datetime
 from diskguard.constants import TOP_N_CONSUMERS, EXCLUDED_DIRECTORIES
+from diskguard.config_loader import containers
 
 def collect_filesystem_usage():
     try:
@@ -95,6 +99,45 @@ def collect_top_n_consumers(top_n=TOP_N_CONSUMERS):
         "consumers": consumers
     }
 
+def format_du_output(output):
+    size, path = output.strip().split(maxsplit=1) 
+    return f"{'PATH':<30}{'SIZE'}\n{path:<30}{size}"
+
+def collect_containers_usage():
+    container_usage = {}
+    for container in containers["containers"]:
+        if not shutil.which(container["binary"]):
+            continue  
+        output = None
+        try:
+            output = subprocess.check_output(container["usage_cmd"], shell=True, stderr=subprocess.STDOUT, text=True)
+        except subprocess.CalledProcessError as e:
+            if "permission denied".lower() in e.output.lower():
+                try:
+                    output = subprocess.check_output("sudo " + container["usage_cmd"], shell=True, stderr=subprocess.STDOUT, text=True)
+                except subprocess.CalledProcessError:
+                    continue
+                    
+                if container["usage_cmd"].startswith("du "):
+                    output = format_du_output(output)
+
+                container_usage[container["name"]] = output
+            continue
+
+        if container["usage_cmd"].startswith("du "):
+            output = format_du_output(output)
+
+        container_usage[container["name"]] = output
+
+    if len(container_usage) == 0:
+        return {
+            "available": False
+        }
+    return {
+        "available": True, 
+        "usage": container_usage
+    }
+
 def collect_inventory():
     hostname = socket.gethostname()
     timestamp = datetime.now().astimezone()
@@ -115,10 +158,14 @@ def collect_inventory():
     # top N consumers
     top_n_consumers = collect_top_n_consumers()
 
+    # containers usage
+    containers_usage = collect_containers_usage()
+
     return {
         "hostname": hostname,
         "timestamp": timestamp,
         "filesystem": filesystem_usage,
         "inode": inode_usage,
-        "top_n_consumers": top_n_consumers
+        "top_n_consumers": top_n_consumers,
+        "containers": containers_usage
 	}
