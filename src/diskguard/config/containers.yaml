@@ -4,13 +4,13 @@ containers:
     binary: docker
   - name: containerd
     usage_cmd: du -sh /var/lib/containerd
-    binary: ctr
+    binary: du
   - name: podman
     usage_cmd: podman system df
     binary: podman
   - name: crio
     usage_cmd: du -sh /var/lib/containers
-    binary: crictl
+    binary: du
   - name: lxc
-    usage_cmd: lxc storage list
-    binary: du -sh /var/lib/lxd
+    usage_cmd: du -sh /var/lib/lxd
+    binary: du

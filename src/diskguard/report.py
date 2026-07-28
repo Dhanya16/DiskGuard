@@ -58,5 +58,5 @@ def print_report(inventory,severity):
     print_filesystem_usage(inventory['filesystem'])
     print_inode_usage(inventory['inode'])
     print_top_consumers(inventory['top_n_consumers'])
-    print_severity(severity)
     print_containers_usage(inventory['containers'])
+    print_severity(severity)
