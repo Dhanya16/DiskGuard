@@ -99,10 +99,14 @@ def collect_top_n_consumers(top_n=TOP_N_CONSUMERS):
         "consumers": consumers
     }
 
+def format_du_output(output):
+    size, path = output.strip().split(maxsplit=1) 
+    return f"{'PATH':<30}{'SIZE'}\n{path:<30}{size}"
+
 def collect_containers_usage():
     container_usage = {}
     for container in containers["containers"]:
-        if not shutil.which(container["name"]):
+        if not shutil.which(container["binary"]):
             continue  
         output = None
         try:
@@ -113,9 +117,18 @@ def collect_containers_usage():
                     output = subprocess.check_output("sudo " + container["usage_cmd"], shell=True, stderr=subprocess.STDOUT, text=True)
                 except subprocess.CalledProcessError:
                     continue
+                    
+                if container["usage_cmd"].startswith("du "):
+                    output = format_du_output(output)
+
                 container_usage[container["name"]] = output
             continue
+
+        if container["usage_cmd"].startswith("du "):
+            output = format_du_output(output)
+
         container_usage[container["name"]] = output
+
     if len(container_usage) == 0:
         return {
             "available": False
@@ -153,5 +166,6 @@ def collect_inventory():
         "timestamp": timestamp,
         "filesystem": filesystem_usage,
         "inode": inode_usage,
-        "top_n_consumers": top_n_consumers
+        "top_n_consumers": top_n_consumers,
+        "containers": containers_usage
 	}

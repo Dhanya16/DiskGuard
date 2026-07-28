@@ -26,6 +26,7 @@ def print_usage():
     inode-usage - Show inode usage
     top-consumers - Show top consumers
     severity - Show severity
+    containers-usage - Show containers usage
 
     Examples:
     diskguard all
@@ -33,6 +34,7 @@ def print_usage():
     diskguard inode-usage
     diskguard top-consumers 10
     diskguard severity
+    diskguard containers-usage
     """)
 
 def main():

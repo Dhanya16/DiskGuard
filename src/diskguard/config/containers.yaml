@@ -1,11 +1,16 @@
 containers:
   - name: docker
     usage_cmd: docker system df
-  - name: containerd 
-    usage_cmd: ctr images ls
+    binary: docker
+  - name: containerd
+    usage_cmd: du -sh /var/lib/containerd
+    binary: ctr
   - name: podman
     usage_cmd: podman system df
+    binary: podman
   - name: crio
-    usage_cmd: crictl images
+    usage_cmd: du -sh /var/lib/containers
+    binary: crictl
   - name: lxc
     usage_cmd: lxc storage list
+    binary: du -sh /var/lib/lxd
