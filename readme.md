@@ -4,7 +4,7 @@ Operator-facing tool for a single Linux host: see disk capacity clearly, get **O
 
 This repo is also a systems-engineering practice project (requirements → design → implement by phase). Product requirements live in [`prd.md`](./prd.md); design in [`docs/hld.md`](./docs/hld.md).
 
-**Current status:** Phase 1.2 — on-demand inventory (filesystem, inodes, top consumers, containers) + configurable severity.
+**Current status:** Phase 1.2 — on-demand inventory (filesystem, inodes, top consumers, containers, log footprint) + configurable severity.
 
 ---
 
@@ -49,21 +49,27 @@ source .venv/bin/activate
 
 | Command | What it does |
 |---------|----------------|
-| `diskguard` or `diskguard all` | Full report: filesystem, inodes, top consumers, containers, severity |
+| `diskguard` or `diskguard all` | Full report: filesystem, inodes, top consumers, containers, log footprint, severity |
 | `diskguard filesystem-usage` | Root filesystem capacity only |
 | `diskguard inode-usage` | Root inode capacity only |
 | `diskguard top-consumers` | Top 5 directory consumers under `/` |
 | `diskguard top-consumers 10` | Top N consumers (integer) |
 | `diskguard containers-usage` | Container runtime storage summary (docker/podman/`du` paths) |
-| `diskguard severity` | Severity only (no top-consumer scan) |
+| `diskguard log-footprint` | System journal size, limit, retention, and path |
+| `diskguard severity` | Severity only (no top-consumer / container / log scan) |
+| `diskguard --help` / `-h` / `help` | Show CLI help |
+| `diskguard --version` / `-v` | Show package version |
 
 Examples:
 
 ```bash
+diskguard --help
+diskguard --version
 diskguard all
 diskguard severity
 diskguard top-consumers 10
 diskguard containers-usage
+diskguard log-footprint
 ```
 
 ---
@@ -107,8 +113,9 @@ DiskGuard/
     inventory.py              # Capacity collectors
     thresholds.py             # OK / WARN / CRIT evaluation
     report.py                 # Human-readable output
-    config_loader.py          # Loads threshold YAML
+    config_loader.py          # Loads YAML config
     config/thresholds.yaml    # Tunable warn/crit values
+    config/containers.yaml    # Container probe commands
     constants.py              # Top-N, excluded paths, units
   reports/                    # Local outputs (gitignored)
 ```
