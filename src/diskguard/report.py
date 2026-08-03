@@ -51,6 +51,23 @@ def print_containers_usage(containers_usage):
         print("Unavailable\n")
     print("--------------------------------")
 
+def print_log_footprint(log_footprint):
+    print("Log Footprint\n")
+    if log_footprint["available"]:
+        details = log_footprint["log_footprint"]
+        print(f"Path          : {details['path']}")
+        print(f"Journal size  : {details['journal_size']}")
+        print(f"Journal limit : {details['journal_limit']}")
+        print(f"Retention     : {details['retention']}")
+        usage = details["usage"]
+        if usage == "NA":
+            print(f"Usage         : {usage}\n")
+        else:
+            print(f"Usage         : {usage} %\n")
+    else:
+        print("Unavailable\n")
+    print("--------------------------------")
+
 def print_report(inventory,severity):
     print(f"Hostname: {inventory['hostname']}")
     print(f"Timestamp: {inventory['timestamp']}")
@@ -59,4 +76,5 @@ def print_report(inventory,severity):
     print_inode_usage(inventory['inode'])
     print_top_consumers(inventory['top_n_consumers'])
     print_containers_usage(inventory['containers'])
+    print_log_footprint(inventory['log_footprint'])
     print_severity(severity)
