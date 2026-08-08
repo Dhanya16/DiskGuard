@@ -6,6 +6,12 @@ __pycache__/
 # Reports
 reports/
 
+# Alert scheduler runtime (host-local)
+src/diskguard/alerts/alert-records.json
+src/diskguard/alerts/latest-severity-records.json
+src/diskguard/alerts/cron.log
+src/diskguard/alerts/diskguard.lock
+
 # IDE
 .vscode/
 .idea/

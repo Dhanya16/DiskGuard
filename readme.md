@@ -4,7 +4,7 @@ Operator-facing tool for a single Linux host: see disk capacity clearly, get **O
 
 This repo is also a systems-engineering practice project (requirements → design → implement by phase). Product requirements live in [`prd.md`](./prd.md); design in [`docs/hld.md`](./docs/hld.md).
 
-**Current status:** Phase 1.2 — on-demand inventory (filesystem, inodes, top consumers, containers, log footprint) + configurable severity.
+**Current status:** Phase 2 (in progress) — Phase 1 inventory + severity, plus scheduled severity checks and local alert records via cron.
 
 ---
 
@@ -98,6 +98,32 @@ On this lab host, root usage around ~80–85% should report overall **WARN** und
 
 ---
 
+## Scheduled checks
+
+Cron can re-run severity evaluation and append local alert records when values change.
+
+1. Install the package in a venv (`pip install -e .`).
+2. Confirm a manual run works (from the repo root):
+
+```bash
+.venv/bin/python src/diskguard/alerts/scheduler.py
+```
+
+3. Add a crontab entry (`crontab -e`). Cron needs **absolute paths** — replace `/path/to/DiskGuard` with your clone location:
+
+```cron
+*/5 * * * * /path/to/DiskGuard/.venv/bin/python /path/to/DiskGuard/src/diskguard/alerts/scheduler.py >> /path/to/DiskGuard/src/diskguard/alerts/cron.log 2>&1
+```
+
+Notes:
+
+- Run the **venv `python` as the command**, then the script. Do not pass `.venv/bin/python` as an argument to `/usr/bin/python3`.
+- State files (gitignored): `latest-severity-records.json`, `alert-records.json`
+- Failures and stderr: `cron.log` (also gitignored)
+- Adjust the schedule (`*/5` = every 5 minutes; `0 * * * *` = hourly) to match your lab needs
+
+---
+
 ## Project layout
 
 ```text
@@ -117,6 +143,8 @@ DiskGuard/
     config/thresholds.yaml    # Tunable warn/crit values
     config/containers.yaml    # Container probe commands
     constants.py              # Top-N, excluded paths, units
+    alerts/
+      scheduler.py            # Cron-driven severity check + alert records
   reports/                    # Local outputs (gitignored)
 ```
 
